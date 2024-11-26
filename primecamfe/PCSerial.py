@@ -6,7 +6,7 @@ _ASSERTIONS = True
 _ENABLE_DEBUG = False
 
 
-class Transceiver:
+class Primecamfe:
     def __init__(self, comport) -> None:
         self.ser = serial.Serial(comport, baudrate=115200, timeout=5)
         time.sleep(.250)
