@@ -8,9 +8,14 @@ _ENABLE_DEBUG = False
 
 class Primecamfe:
     def __init__(self, comport) -> None:
-        self.ser = serial.Serial(comport, baudrate=115200, timeout=5)
+        self.connected = False
+        try:
+            self.ser = serial.Serial(comport, baudrate=115200, timeout=5)
+        except serial.SerialException:
+            raise ConnectionError("Serial port doesn't exist")
         time.sleep(.250)
         if self.ser.is_open:
+            self.connected = True
             self.ser.write(b"get_id\n")
             resp = self.ser.read_until(b"\n")
             if resp.strip() == b"primecam_amp_frontend":
@@ -45,10 +50,6 @@ class Primecamfe:
                 print("Error, device did not respond")
             else:
                 return False, msg
-
-    def __del__(self):
-        if self.ser.is_open:
-            self.ser.close()
 
     def close(self):
         if self.ser.is_open:

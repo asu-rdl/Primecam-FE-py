@@ -1,3 +1,5 @@
 .idea
 dist
 primecamfe/primecamfe.egg-info
+primecamfe/__pycache__
+tests/__pycache__

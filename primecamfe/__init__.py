@@ -1,1 +1,1 @@
-from PCSerial import Primecamfe
+from .PCSerial import Primecamfe
