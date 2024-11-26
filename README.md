@@ -1,2 +1,2 @@
-# Primecam-RF-Frontend-Amp
+# Primecam-FE-py
 RFSoC Frontend Amp Board Attenuator Controls

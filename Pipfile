@@ -5,11 +5,11 @@ name = "pypi"
 
 [packages]
 pyserial = "*"
-setuptools = "*"
-wheel = "*"
-build = "*"
 
 [dev-packages]
+wheel = "*"
+build = "*"
+setuptools = "*"
 
 [requires]
 python_version = "3.12"
