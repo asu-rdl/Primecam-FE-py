@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools", "wheel", "setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,8 @@ name = "primecamfe"
 authors = [{name="Cody Roberson", email="carobers@asu.edu"}]
 description = "This is a library for controlling the Primecam RFSoC frontend amplifiers"
 readme = {file = "README.md", content-type = "text/markdown"}
-version = "0.0.1"
+#version = "0.0.1"
+dynamic = ["version"]
 requires-python = ">= 3.8"
 classifiers = [
     "License :: MIT License",
@@ -26,3 +27,5 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["primecamfe"]
+
+[tool.setuptools_scm]

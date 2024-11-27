@@ -47,11 +47,11 @@ void loop(){
         Serial.readBytes(data, 2);
 
         if (data[0] > 7){
-            Serial.println("FAIL, BAD ADDRESS NOT BETWEEN 1 THROUGH 8");
+            Serial.println("FAIL, BAD ADDRESS NOT BETWEEN 0 THROUGH 7");
             return;
         }
         if (data[1] > 127){
-            Serial.println("FAIL, ATTENUATION VALUE IS TOO LARGE");
+            Serial.println("FAIL, ATTENUATION VALUE MUST BE BETWEEN 0 AND 31.75");
             return;
         }
         //ensure empty input

@@ -5,7 +5,6 @@ import struct
 _ASSERTIONS = True
 _ENABLE_DEBUG = False
 
-
 class Primecamfe:
     def __init__(self, comport) -> None:
         self.connected = False
