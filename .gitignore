@@ -3,3 +3,4 @@ dist
 src/primecamfe/primecamfe.egg-info
 src/primecamfe/__pycache__
 tests/__pycache__
+src/primecamfe.egg-info
