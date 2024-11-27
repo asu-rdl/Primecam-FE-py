@@ -20,14 +20,14 @@ class FunctionalTestSet(unittest.TestCase):
     def test_set_all_to_zero(self):
         attenobj = Primecamfe("/dev/ttyACM0")
         for i in range(0,7+1):
-            a,b = attenobj.set_atten(i, 0)
+            a = attenobj.set_atten(i, 0)
             self.assertTrue(a)
             print(f"Test Channel {i}, {"PASS" if a else "FAIL"}")
 
     def test_set_all_to_max(self):
         attenobj = Primecamfe("/dev/ttyACM0")
         for i in range(0,7+1):
-            a,b = attenobj.set_atten(i, 31.75)
+            a = attenobj.set_atten(i, 31.75)
             self.assertTrue(a)
             print(f"Test Channel {i}, {"PASS" if a else ""}")
 
@@ -91,6 +91,7 @@ class InvalidInputTestNoAssertions(unittest.TestCase):
     def setUp(self):
         import primecamfe.PCSerial as lib
         lib._ASSERTIONS = False
+        lib._ENABLE_DEBUG = True
         self.attenobj = Primecamfe("/dev/ttyACM0")
 
     def test_addr_greater_than_7(self):

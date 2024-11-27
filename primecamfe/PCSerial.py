@@ -1,7 +1,5 @@
-from http.client import responses
 
 import serial.tools.list_ports
-import time
 import struct
 
 _ASSERTIONS = True
@@ -9,6 +7,12 @@ _ENABLE_DEBUG = False
 
 class Primecamfe:
     def __init__(self, comport) -> None:
+        """
+        Primecam RF Front End control. On initialization this will attempt to connect
+        to the provided device and verify it works with this software
+        :param comport: Comport or path that the attenuator is connected to.
+            eg: COM13 or /dev/ttyACM0  (users can create permanent simlinks to this dev using udevrules in Ubuntu)
+        """
         self.connected = False
         try:
             self.ser = serial.Serial(comport, baudrate=115200, timeout=5)
@@ -18,7 +22,7 @@ class Primecamfe:
             self.connected = True
             self.ser.write(b"get_id\n")
             resp = self.ser.read_until(b"\n")
-            if resp.strip() == b"primecam_amp_frontend":
+            if resp.strip(b"\r\n ") == b"primecam_amp_frontend":
                 print("Connected")
             else:
                 self.ser.close()
@@ -28,6 +32,14 @@ class Primecamfe:
         
     
     def set_atten(self, addr:int, value : float):
+        """
+        Sets the attenuator to the provided value.
+        :param addr: Channel or address of the attenuator  (0 through 7)
+        :param value: Value of the attenuator (0 through 31.75)
+        :return: returns bool: True if success/False otherwise.
+
+        If _ENABLE_DEBUG is asserted then a tuple is returned
+        """
         if not self.ser.is_open:
             raise ConnectionError("Not connected to Primecam RF Frontend Amp Controller")
         if _ASSERTIONS:
@@ -43,22 +55,28 @@ class Primecamfe:
             if _ENABLE_DEBUG:
                 return True, "OK", atten
             else:
-                return True, "OK"
+                return True
         else:
             print(response) if _ENABLE_DEBUG else None
             msg = response.decode().strip('\n').strip('\r')
             if len(msg) == 0:
                 print("Error, device did not respond")
             else:
-                return False, msg
+                return (False, msg) if _ENABLE_DEBUG else False
 
-    def get_atten(self, address:int) -> float:
+
+    def get_atten(self, addr:int) -> float:
+        """
+        Returns the attenuator value at the provided address.
+        :param addr: Channel or address of the attenuator  (0 through 7)
+        :return: The channel's current attenuation setting
+        """
         if not self.ser.is_open:
             raise ConnectionError("Couldn't open serial port.")
         if _ASSERTIONS:
-            assert address >= 0 and address <= 7, "Address out of range (0 through 7)"
+            assert addr >= 0 and addr <= 7, "Address out of range (0 through 7)"
         self.ser.write(b"get_atten\n")
-        data = struct.pack('<B', address)
+        data = struct.pack('<B', addr)
         self.ser.write(data)
         response = self.ser.readline()
         rrr = response.decode().strip('\n\r')
