@@ -54,16 +54,18 @@ get_atten(addr):
 
 
 ## Example
+
 ```python
-from  primecamfe import Primecamfe
+from src.primecamfe import Primecamfe
+
 fe1 = Primecamfe('/dev/ttyUSB0')
 
 # set all the attenuators to 31.75 dB of attenuation
-for channel in range(0, 7+1):
+for channel in range(0, 7 + 1):
     fe1.set_atten(channel, 31.75)
 
 # read back the attenuators
-for channel in range(0, 7+1):
+for channel in range(0, 7 + 1):
     print(fe1.get_atten(channel))
 ```
 

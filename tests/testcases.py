@@ -1,8 +1,6 @@
 import unittest
-from unittest import skipIf
 
-from  primecamfe import Primecamfe
-import numpy as np
+from src.primecamfe import Primecamfe
 
 """
 Code assumes:
@@ -36,7 +34,7 @@ class FunctionalTestSet(unittest.TestCase):
         print(attenobj.get_atten(0))
 
     def test_get_atten_after_set(self):
-        from primecamfe import PCSerial
+        from src.primecamfe import PCSerial
         PCSerial._ENABLE_DEBUG = True
         attenobj = Primecamfe("/dev/ttyACM0")
         for j in range(0, 7+1):
@@ -49,7 +47,7 @@ class FunctionalTestSet(unittest.TestCase):
         PCSerial._ENABLE_DEBUG = False
 
     def test_rounding(self):
-        from primecamfe import PCSerial
+        from src.primecamfe import PCSerial
         PCSerial._ENABLE_DEBUG = True
         attenobj = Primecamfe("/dev/ttyACM0")
         attenobj.set_atten(0, 2.3)
@@ -65,7 +63,7 @@ class FunctionalTestSet(unittest.TestCase):
 
 class InvalidInputTestWithAssertions(unittest.TestCase):
     def setUp(self):
-        import primecamfe.PCSerial as lib
+        import src.primecamfe.PCSerial as lib
         lib._ASSERTIONS = True
         self.attenobj = Primecamfe("/dev/ttyACM0")
 
@@ -89,7 +87,7 @@ class InvalidInputTestWithAssertions(unittest.TestCase):
 
 class InvalidInputTestNoAssertions(unittest.TestCase):
     def setUp(self):
-        import primecamfe.PCSerial as lib
+        import src.primecamfe.PCSerial as lib
         lib._ASSERTIONS = False
         lib._ENABLE_DEBUG = True
         self.attenobj = Primecamfe("/dev/ttyACM0")
@@ -124,7 +122,7 @@ class InvalidInputTestNoAssertions(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_atten_extreme_value(self):
-        import primecamfe.PCSerial as lib
+        import src.primecamfe.PCSerial as lib
         lib._ASSERTIONS = False
         lib._ENABLE_DEBUG = True
         a, b, c = self.attenobj.set_atten(0, 10000.2)
