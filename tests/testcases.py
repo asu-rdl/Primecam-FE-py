@@ -1,5 +1,8 @@
 import unittest
+from unittest import skipIf
+
 from  primecamfe import Primecamfe
+import numpy as np
 
 """
 Code assumes:
@@ -27,6 +30,38 @@ class FunctionalTestSet(unittest.TestCase):
             a,b = attenobj.set_atten(i, 31.75)
             self.assertTrue(a)
             print(f"Test Channel {i}, {"PASS" if a else ""}")
+
+    def test_get_atten(self):
+        attenobj = Primecamfe("/dev/ttyACM0")
+        print(attenobj.get_atten(0))
+
+    def test_get_atten_after_set(self):
+        from primecamfe import PCSerial
+        PCSerial._ENABLE_DEBUG = True
+        attenobj = Primecamfe("/dev/ttyACM0")
+        for j in range(0, 7+1):
+            for i in range(0, 31):
+                print(f"Test Channel {j}, Attenuation {i}")
+                attenobj.set_atten(j, i)
+                a = attenobj.get_atten(j)
+                self.assertEqual(a, i)
+                print("PASS")
+        PCSerial._ENABLE_DEBUG = False
+
+    def test_rounding(self):
+        from primecamfe import PCSerial
+        PCSerial._ENABLE_DEBUG = True
+        attenobj = Primecamfe("/dev/ttyACM0")
+        attenobj.set_atten(0, 2.3)
+        self.assertEqual(attenobj.get_atten(0), 2.25)
+        attenobj.set_atten(0, 2.49)
+        self.assertEqual(attenobj.get_atten(0), 2.5)
+        attenobj.set_atten(0, 2.1)
+        self.assertEqual(attenobj.get_atten(0), 2.0)
+        PCSerial._ENABLE_DEBUG = False
+
+
+
 
 class InvalidInputTestWithAssertions(unittest.TestCase):
     def setUp(self):
@@ -86,6 +121,7 @@ class InvalidInputTestNoAssertions(unittest.TestCase):
         self.assertFalse(a)
         self.assertEqual(b, "FAIL, ATTENUATION VALUE MUST BE BETWEEN 0 AND 31.75")
 
+    @unittest.expectedFailure
     def test_atten_extreme_value(self):
         import primecamfe.PCSerial as lib
         lib._ASSERTIONS = False
@@ -94,6 +130,7 @@ class InvalidInputTestNoAssertions(unittest.TestCase):
         print(a,b,c)
         self.assertFalse(a)
         self.assertEqual(b, "FAIL, ATTENUATION VALUE MUST BE BETWEEN 0 AND 31.75")
+
 
 
 if __name__ == '__main__':

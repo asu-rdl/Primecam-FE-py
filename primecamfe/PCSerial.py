@@ -1,3 +1,5 @@
+from http.client import responses
+
 import serial.tools.list_ports
 import time
 import struct
@@ -12,7 +14,6 @@ class Primecamfe:
             self.ser = serial.Serial(comport, baudrate=115200, timeout=5)
         except serial.SerialException:
             raise ConnectionError("Serial port doesn't exist")
-        time.sleep(.250)
         if self.ser.is_open:
             self.connected = True
             self.ser.write(b"get_id\n")
@@ -44,11 +45,29 @@ class Primecamfe:
             else:
                 return True, "OK"
         else:
+            print(response) if _ENABLE_DEBUG else None
             msg = response.decode().strip('\n').strip('\r')
             if len(msg) == 0:
                 print("Error, device did not respond")
             else:
                 return False, msg
+
+    def get_atten(self, address:int) -> float:
+        if not self.ser.is_open:
+            raise ConnectionError("Couldn't open serial port.")
+        if _ASSERTIONS:
+            assert address >= 0 and address <= 7, "Address out of range (0 through 7)"
+        self.ser.write(b"get_atten\n")
+        data = struct.pack('<B', address)
+        self.ser.write(data)
+        response = self.ser.readline()
+        rrr = response.decode().strip('\n\r')
+        try:
+            x = int(rrr)
+        except ValueError:
+            raise ValueError("Unexpected value returned from microcontroller.")
+        return x/4.0
+
 
     def close(self):
         if self.ser.is_open:

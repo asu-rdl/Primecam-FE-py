@@ -2,6 +2,8 @@
 #NOTE: I left a strange ordering that needs to be accounted for when dealing with errors
 since we may have succeeded in commanding the IO expander but fail to disconnect from the bus. 
 **/
+#define _CLEARBUFF  while(Serial.available()>0){Serial.read();}
+
 #include <Wire.h>
 
 #define __I2C_REPEATER_I2C_ADDR 0b1100000
@@ -12,40 +14,39 @@ since we may have succeeded in commanding the IO expander but fail to disconnect
 // send the 'connect bus' command to the register.
 int connect_i2c_bus(uint8_t address)
 {
-  Wire.beginTransmission(__I2C_REPEATER_I2C_ADDR + address);
-  Wire.write(__LTC4302_CMD_CONNECT_CARD); // Connect IIC Bus
-  return Wire.endTransmission();
+    Wire.beginTransmission(__I2C_REPEATER_I2C_ADDR + address);
+    Wire.write(__LTC4302_CMD_CONNECT_CARD); // Connect IIC Bus
+    return Wire.endTransmission();
 }
 
 // send the 'disconnect bus' command to the repeater
 int disconnect_i2c_bus(uint8_t address)
 {
-  Wire.beginTransmission(__I2C_REPEATER_I2C_ADDR + address);
-  Wire.write(__LTC4302_CMD_DISCONNECT_CARD);
-  return Wire.endTransmission();
+    Wire.beginTransmission(__I2C_REPEATER_I2C_ADDR + address);
+    Wire.write(__LTC4302_CMD_DISCONNECT_CARD);
+    return Wire.endTransmission();
 }
 
 void setup(){
-  Serial.begin(115200);
-  Wire.begin();    
+    Serial.begin(115200);
+    Wire.begin();    
 }
 
 void loop(){
-  char data[2];
-	while(Serial.available() < 2);
+    char data[2];
+
+    while(Serial.available() < 2);
 
     String str = Serial.readStringUntil('\n');
     if (str.equals("get_id")){
         //ensure empty input
-        while(Serial.available()>0){
-            Serial.read();
-        }
+        _CLEARBUFF
         Serial.println("primecam_amp_frontend");
     }
     else if (str.equals("set_atten"))
     {
         Serial.readBytes(data, 2);
-
+        _CLEARBUFF
         if (data[0] > 7){
             Serial.println("FAIL, BAD ADDRESS NOT BETWEEN 0 THROUGH 7");
             return;
@@ -55,9 +56,7 @@ void loop(){
             return;
         }
         //ensure empty input
-        while(Serial.available()>0){
-            Serial.read();
-        }
+      
 
       if (connect_i2c_bus(data[0])!=0){
         Serial.println(("FAIL, NO-ACKNOWLEDGE FROM I2C REPEATER ON CONNECT()"));
@@ -75,7 +74,29 @@ void loop(){
       } else {
           Serial.println("FAIL, NO-ACKNOWLEDGE FROM IO EXPANDER");
       }
-    } else {
+    } else if(str.equals("get_atten")){
+        Serial.readBytes(data, 1);
+        _CLEARBUFF
+        if (data[0] > 7){
+            Serial.println("FAIL, BAD ADDRESS NOT BETWEEN 0 THROUGH 7");
+            return;
+        }
+        if (connect_i2c_bus(data[0])!=0){
+            Serial.println(("FAIL, NO-ACKNOWLEDGE FROM I2C REPEATER ON CONNECT()"));
+            return;
+        }
+        data[1] = 0;
+        Wire.requestFrom(0b0100000, 1);
+        data[1] = Wire.read();
+        int status = Wire.endTransmission();
+        if (disconnect_i2c_bus(data[0])!=0){
+            Serial.println("FAIL, NO-ACKNOWLEDGE FROM I2C REPEATER ON DISCONNECT()");
+            return;
+        }
+        Serial.println(data[1], DEC);
+
+    } 
+    else {
         Serial.println("BAD COMMAND");
     }
 

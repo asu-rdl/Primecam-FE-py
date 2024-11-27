@@ -10,6 +10,7 @@ pyserial = "*"
 wheel = "*"
 build = "*"
 setuptools = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.12"
