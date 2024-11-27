@@ -56,7 +56,7 @@ get_atten(addr):
 ## Example
 
 ```python
-from src.primecamfe import Primecamfe
+from primecamfe import Primecamfe
 
 fe1 = Primecamfe('/dev/ttyUSB0')
 
