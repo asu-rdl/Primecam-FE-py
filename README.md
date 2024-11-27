@@ -1,6 +1,8 @@
 # Primecam-FE-py
 RFSoC Frontend Amp Board Attenuator Controls
 
+Note: After a full power cycle of the attenuators where they have never been commanded, get_atten will return 63.75 which is invalid. They nevertheless start in a max attenuation state of 31.75 dB.
+
 # Installation
 ____
 * Open a terminal and run pip
