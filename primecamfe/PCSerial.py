@@ -32,7 +32,7 @@ class Primecamfe:
             raise ConnectionError("Not connected to Primecam RF Frontend Amp Controller")
         if _ASSERTIONS:
             assert value >= 0 and value <= 31.75, "Attenuation out of range (0 through 31.75)"
-            assert addr >= 1 and addr <= 8, "Address out of range (1 through 8)"
+            assert addr >= 0 and addr <= 7, "Address out of range (0 through 7)"
         atten = int(round(value*4))&0xFF
         address = addr&0xFF
         data = struct.pack('<BB', address, atten)

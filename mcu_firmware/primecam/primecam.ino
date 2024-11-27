@@ -46,7 +46,7 @@ void loop(){
     {
         Serial.readBytes(data, 2);
 
-        if (data[0] == 0 || data[0] > 8){
+        if (data[0] > 7){
             Serial.println("FAIL, BAD ADDRESS NOT BETWEEN 1 THROUGH 8");
             return;
         }
