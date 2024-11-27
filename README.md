@@ -4,7 +4,7 @@ RFSoC Frontend Amp Board Attenuator Controls
 # Installation
 ____
 * Open a terminal and run pip
-  * pip install https://github.com/asu-rdl/Primecam-FE-py/releases/latest/download/primecamfe-0.1.0-py3-none-any.whl`
+  * `pip install https://github.com/asu-rdl/Primecam-FE-py/releases/latest/download/primecamfe-0.1.0-py3-none-any.whl`
 * Or visit github and download the whl file from here and install manually:
   * https://github.com/asu-rdl/Primecam-FE-py/releases/latest
   * `pip install primecamfe-X.X.X-py3-none-any.whl`
