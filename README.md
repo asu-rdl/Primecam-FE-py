@@ -7,7 +7,7 @@ ____
   * `pip install https://github.com/asu-rdl/Primecam-FE-py/releases/latest/download/primecamfe-0.1.0-py3-none-any.whl`
 * Or visit github and download the whl file from here and install manually:
   * https://github.com/asu-rdl/Primecam-FE-py/releases/latest
-  * `pip install primecamfe-X.X.X-py3-none-any.whl`
+  * `pip install ./primecamfe-X.X.X-py3-none-any.whl`
 * If installing on an RFSoC with no internet, you'll want to download [pyserial](https://pypi.org/project/pyserial/#files)
 and install both together.
   * `pip install ./primecamfe-X.X.X-py3-none-any.whl ./pyserial-3.5-py2.py3-none-any.whl`
