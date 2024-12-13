@@ -74,7 +74,7 @@ for channel in range(0, 7 + 1):
 1. Clone this repository
 1. Open a terminal and navigate to `mcu_firmware` within this repository
 1. Scp the `primecamfe_prototype` firmware to the RFSoC
-    1. `scp -r primecamfe_prototype xilinx@some.ip.address.here:~/
+    1. `scp -r primecamfe_prototype xilinx@some.ip.address.here:~/`
 1. ssh into the RFSoC `ssh xilinx@some.ip.address.here`
 1. `sudo -s`
 1. `source activate.sh` activate the python pynq virtual env, 

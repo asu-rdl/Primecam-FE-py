@@ -42,7 +42,7 @@ a = findarduino()
 if a == "":
     raise Exception("Couldn't locate arduino")
     
-print(f"Found arduino at {a}, Performing 1200-bps touch reset on serial port /dev/ttyACM0")
+print(f"Found arduino at {a}, Performing 1200-bps touch reset on serial port {a}")
 s = serial.Serial(a, baudrate=1200)
 s.close()
 print("waiting for arduino port")
